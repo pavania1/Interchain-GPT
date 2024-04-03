@@ -16,9 +16,9 @@ export const deleteSession = () => (dispatch) => {
   });
 };
 
-export const addSessionData = () => (dispatch) => {
+export const addSessionData = (data) => (dispatch) => {
   return dispatch({
     type: ADD_SESSION_DATA,
-    payload: {},
+    payload: data,
   });
 };

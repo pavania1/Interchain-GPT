@@ -4,12 +4,13 @@ import Image from "next/image";
 import { Tooltip } from "@mui/material";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { addSession } from "@/redux/actions/sessionActions";
+import { addSession, addSessionData } from "@/redux/actions/sessionActions";
 import { v4 as uuidv4 } from "uuid";
-export default function MainPage() {
+
+export default function MainPage(props) {
+  const sessionData = useSelector((state) => state.session.sessionData);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
-  const sessionList = useSelector((state) => state.session);
   const [message, setMessage] = useState("");
   useEffect(() => {
     let sessionId = sessionStorage.getItem("sessionId");
@@ -23,12 +24,16 @@ export default function MainPage() {
         })
       );
     }
-    console.log("sessionId is ", sessionId);
-    // fetch msgs of that session
   }, []);
+
   useEffect(() => {
-    console.log("sessionList is ", sessionList);
-  }, [sessionList?.length]);
+    let p = props.sessionId;
+    const oldMessages = sessionData[p];
+    if (oldMessages) {
+      setData([...oldMessages]);
+    }
+  }, [props.sessionId]);
+
   const handleMessageChange = (event) => {
     setMessage(event.target.value);
   };
@@ -41,7 +46,7 @@ export default function MainPage() {
         type: "You",
       },
     ];
-    // dispatch(addSession(copyData));
+    dispatch(addSessionData(copyData[0]));
     setData((prev) => [...prev, ...copyData]);
     setMessage("");
     axios
@@ -58,19 +63,11 @@ export default function MainPage() {
               type: "InterChainGPT",
             },
           ];
+          dispatch(addSessionData(copyData[0]));
 
           setData((prev) => [...prev, ...copyData]);
         } else {
           console.log("Entered Success case");
-
-          // persistent store to history (use db or local storage)
-
-          //storage
-          /*
-
-            Map<Key: string, Value: {Prompt, Answer}[] >
-
-          */
 
           let copyData = [
             {
@@ -78,7 +75,7 @@ export default function MainPage() {
               type: "InterChainGPT",
             },
           ];
-
+          dispatch(addSessionData(copyData[0]));
           setData((prev) => [...prev, ...copyData]);
         }
       })

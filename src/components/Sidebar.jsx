@@ -1,8 +1,23 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 export default function Sidebar(props) {
-  console.log(props.sidebarOPen, "--------");
+  const sessionList = useSelector((state) => state.session.sessions);
+  const sessionData = useSelector((state) => state.session.sessionData);
+  const [data, setData] = useState([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    setData(sessionList);
+  }, [sessionList.length]);
+
+  const handleOnClick = (sessionId) => {
+    router.push(`?sessionId=${sessionId}`);
+    props.setSession(sessionId);
+  };
   return (
     <>
       <div
@@ -29,6 +44,24 @@ export default function Sidebar(props) {
             />
           </Tooltip>
         </div>
+        {
+          <div className="">
+            {data.map((item, index) => {
+              return (
+                <div
+                  className="cursor-pointer hover:bg-[rgb(20,20,20)] p-2 rounded-xl"
+                  key={index}
+                >
+                  <div onClick={() => handleOnClick(item.sessionId)}>
+                    {sessionData[item.sessionId]
+                      ? sessionData[item.sessionId][0].message
+                      : ""}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        }
         <div className="bottom-0 fixed mb-4">
           <div className="flex space-x-2 cursor-pointer hover:bg-[rgb(20,20,20)] p-2 rounded-xl">
             <div className="tooltip">
