@@ -91,7 +91,7 @@ export default function MainPage(props) {
   return (
     <div className="bg-[#171717] flex flex-col  w-full p-4 overflow-y-hidden h-[100vh] ">
       <div className="flex space-x-1 items-start hover:bg-zinc-800 p-2 rounded-xl w-[15%] xs:hidden sm:hidden lg:flex md:flex">
-        <div className="font-bold">InterChainGPT</div>
+        <div className="font-bold text-white">InterChainGPT</div>
         <p className="text-[rgb(224,215,215)] font-bold">3.5</p>
       </div>
       <div className="flex items-center justify-center w-full h-full">
