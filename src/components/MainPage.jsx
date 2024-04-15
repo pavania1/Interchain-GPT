@@ -96,7 +96,7 @@ export default function MainPage(props) {
       </div>
       <div className="flex items-center justify-center w-full h-full">
         <div className="max-w-[1100px] justify-center h-[100%] ">
-          <div className="flex flex-col my-6  items-center overflow-y-scroll h-[80%] ">
+          <div className="flex flex-col my-6  items-center overflow-y-scroll h-[80%]  ">
             {data.length > 0 ? (
               <div className="">
                 {data.map((item, index) => {

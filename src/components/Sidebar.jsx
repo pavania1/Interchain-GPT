@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { deleteSession } from "@/redux/actions/sessionActions";
+import moment from "moment";
 
 export default function Sidebar(props) {
   const sessionList = useSelector((state) => state.session.sessions);
   const sessionData = useSelector((state) => state.session.sessionData);
   const [data, setData] = useState([]);
   const router = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setData(sessionList);
   }, [sessionList.length]);
+
+  useEffect(() => {
+    console.log(props.sidebarOpen, "-there --->")
+  }, [props.sidebarOpen]);
 
   const handleOnClick = (sessionId) => {
     router.push(`?sessionId=${sessionId}`);
@@ -22,10 +27,7 @@ export default function Sidebar(props) {
   };
 
   const handleDelete = (sessionId) => {
-    // const newData = data.filter(item => item.sessionId !== sessionId);
-    // setData(newData);
-    dispatch(deleteSession(sessionId))
-    // Optionally, you can dispatch an action to update the session list in your Redux store
+    dispatch(deleteSession(sessionId));
   };
 
   return (
@@ -61,7 +63,7 @@ export default function Sidebar(props) {
             </div>
           </Tooltip>
         </div>
-        <div className="">
+        <div className="overflow-y-scroll max-h-[80vh]">
           {data.map((item, index) => {
             return (
               <div
@@ -73,6 +75,7 @@ export default function Sidebar(props) {
                     ? sessionData[item.sessionId][0].message
                     : ""}
                 </div>
+                <p> {moment.unix(item.createdAt / 1000).fromNow()}</p>
                 <Image
                   src="/delete.png"
                   width={20}

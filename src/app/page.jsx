@@ -12,23 +12,13 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sessionId, setSessionId] = useState("");
   const toggleSidebar = () => {
+    console.log("here ",sidebarOpen);
     setSidebarOpen(!sidebarOpen);
   };
 
   const setSession = (sessionId) => {
     setSessionId(sessionId);
   };
-
-  // useEffect(() => {
-  //   let sessionId = window.location.href;
-  //   console.log(sessionId, "sessionId");
-  //   const p = sessionId.split("=")[1];
-  //   const oldMessages = sessionData[p];
-  //   if (oldMessages) {
-  //     console.log(oldMessages, "----->old");
-  //     setData([...oldMessages]);
-  //   }
-  // }, [window.location.href]);
 
   return (
     <Provider store={store}>
@@ -41,6 +31,7 @@ export default function Home() {
                 width={24}
                 height={24}
                 alt="Hamburger-Icon"
+                className="cursor-pointer"
               />
             </div>
             <div className="flex space-x-1 hover:bg-zinc-800 p-2 rounded-xl w-[15%]">
@@ -58,7 +49,7 @@ export default function Home() {
               </Tooltip>
             </div>
           </div>
-          <Sidebar setSession={setSession} sidebarOPen={sidebarOpen} />
+          <Sidebar setSession={setSession} sidebarOpen={sidebarOpen} />
           <MainPage sessionId={sessionId} />
         </div>
       </PersistGate>
