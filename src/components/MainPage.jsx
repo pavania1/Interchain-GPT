@@ -27,10 +27,13 @@ export default function MainPage(props) {
   }, []);
 
   useEffect(() => {
-    let p = props.sessionId;
+    let p = props.sessionId || "";
     const oldMessages = sessionData[p];
     if (oldMessages) {
       setData([...oldMessages]);
+    }
+    if (p.length == 0) {
+      setData([]);
     }
   }, [props.sessionId]);
 
@@ -86,58 +89,64 @@ export default function MainPage(props) {
   };
 
   return (
-    <div className="bg-[#171717] w-full p-4 overflow-y-hidden h-[100vh] ">
-      <div className="flex space-x-1 hover:bg-zinc-800 p-2 rounded-xl w-[15%] xs:hidden sm:hidden lg:flex md:flex">
+    <div className="bg-[#171717] flex flex-col  w-full p-4 overflow-y-hidden h-[100vh] ">
+      <div className="flex space-x-1 items-start hover:bg-zinc-800 p-2 rounded-xl w-[15%] xs:hidden sm:hidden lg:flex md:flex">
         <div className="font-bold">InterChainGPT</div>
         <p className="text-[rgb(224,215,215)] font-bold">3.5</p>
       </div>
-
-      <div className="max-w-[1280px]  justify-center h-[100%]">
-        <div className="flex flex-col my-6  items-center overflow-y-scroll h-[80%] ">
-          {data.length > 0 ? (
-            <div className="">
-              {data.map((item, index) => {
-                return (
-                  <div className="my-6" key={index}>
-                    <span style={{ fontWeight: "bold", fontSize: "18px" }}>
-                      {item.type}:
-                    </span>
-                    <br />
-                    {item.message}
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <>
+      <div className="flex items-center justify-center w-full h-full">
+        <div className="max-w-[1100px] justify-center h-[100%] ">
+          <div className="flex flex-col my-6  items-center overflow-y-scroll h-[80%] ">
+            {data.length > 0 ? (
               <div className="">
-                <Image src="/logo.svg" width={50} height={50} alt="logo-icon" />
+                {data.map((item, index) => {
+                  return (
+                    <div className="my-6" key={index}>
+                      <span style={{ fontWeight: "bold", fontSize: "18px" }}>
+                        {item.type}:
+                      </span>
+                      <br />
+                      {item.message}
+                    </div>
+                  );
+                })}
               </div>
-              <div className="font-bold text-2xl mt-2">
-                How can I help you today?
-              </div>
-            </>
-          )}
-        </div>
-        <div className="border rounded-xl border-zinc-600 p-2 flex mx-auto lg:w-[60%] md:w-[60%] sm:w-full xs:w-full">
-          <textarea
-            type="text"
-            value={message}
-            onChange={handleMessageChange}
-            placeholder="Enter your message..."
-            className="w-full bg-transparent outline-none border-none text-[rgb(173,171,171)]"
-          />
+            ) : (
+              <>
+                <div className="">
+                  <Image
+                    src="/logo.svg"
+                    width={50}
+                    height={50}
+                    alt="logo-icon"
+                  />
+                </div>
+                <div className="font-bold text-2xl mt-2">
+                  How can I help you today?
+                </div>
+              </>
+            )}
+          </div>
+          <div className="border rounded-xl border-zinc-600 p-2 flex w-full">
+            <textarea
+              type="text"
+              value={message}
+              onChange={handleMessageChange}
+              placeholder="Enter your message..."
+              className="w-full bg-transparent outline-none border-none text-[rgb(173,171,171)]"
+            />
 
-          <button
-            className="border rounded-xl border-zinc-600 p-2 bg-white"
-            onClick={handleSubmit}
-          >
-            <Image src="/arrow.png" width={24} height={24} alt="enter-icon" />
-          </button>
-        </div>
-        <div className="mt-2 text-sm text-[rgb(173,171,171)] text-center">
-          InterChainGPT can make mistakes. Consider checking important
-          information.
+            <button
+              className="border rounded-xl border-zinc-600 p-2 bg-white"
+              onClick={handleSubmit}
+            >
+              <Image src="/arrow.png" width={24} height={24} alt="enter-icon" />
+            </button>
+          </div>
+          <div className="mt-2 text-sm text-[rgb(173,171,171)] text-center">
+            InterChainGPT can make mistakes. Consider checking important
+            information.
+          </div>
         </div>
       </div>
     </div>

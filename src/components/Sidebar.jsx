@@ -1,14 +1,16 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import { deleteSession } from "@/redux/actions/sessionActions";
+
 export default function Sidebar(props) {
   const sessionList = useSelector((state) => state.session.sessions);
   const sessionData = useSelector((state) => state.session.sessionData);
   const [data, setData] = useState([]);
   const router = useRouter();
+  const dispatch = useDispatch()
 
   useEffect(() => {
     setData(sessionList);
@@ -18,11 +20,19 @@ export default function Sidebar(props) {
     router.push(`?sessionId=${sessionId}`);
     props.setSession(sessionId);
   };
+
+  const handleDelete = (sessionId) => {
+    // const newData = data.filter(item => item.sessionId !== sessionId);
+    // setData(newData);
+    dispatch(deleteSession(sessionId))
+    // Optionally, you can dispatch an action to update the session list in your Redux store
+  };
+
   return (
     <>
       <div
         className={`w-[320px] md:block lg:block  ${
-          props.sidebarOPen ? "sm:block xs:block" : "sm:hidden xs:hidden"
+          props.sidebarOpen ? "sm:block xs:block" : "sm:hidden xs:hidden"
         }  p-4 min-h-screen bg-black`}
       >
         <div className="flex justify-between cursor-pointer hover:bg-[rgb(20,20,20)] p-2 rounded-xl">
@@ -36,32 +46,45 @@ export default function Sidebar(props) {
             <div className="mt-1">New Chat</div>
           </div>
           <Tooltip title="New Chat" placement="right-start">
-            <Image
-              src="/sign-icon.svg"
-              width={20}
-              height={20}
-              alt="Note-Icon"
-            />
+            <div
+              onClick={() => {
+                props.setSession("");
+                router.push("/");
+              }}
+            >
+              <Image
+                src="/sign-icon.svg"
+                width={20}
+                height={20}
+                alt="Note-Icon"
+              />
+            </div>
           </Tooltip>
         </div>
-        {
-          <div className="">
-            {data.map((item, index) => {
-              return (
-                <div
-                  className="cursor-pointer hover:bg-[rgb(20,20,20)] p-2 rounded-xl"
-                  key={index}
-                >
-                  <div onClick={() => handleOnClick(item.sessionId)}>
-                    {sessionData[item.sessionId]
-                      ? sessionData[item.sessionId][0].message
-                      : ""}
-                  </div>
+        <div className="">
+          {data.map((item, index) => {
+            return (
+              <div
+                className="cursor-pointer  hover:bg-[rgb(20,20,20)] p-2 rounded-xl flex justify-between"
+                key={index}
+              >
+                <div onClick={() => handleOnClick(item.sessionId)}>
+                  {sessionData[item.sessionId]
+                    ? sessionData[item.sessionId][0].message
+                    : ""}
                 </div>
-              );
-            })}
-          </div>
-        }
+                <Image
+                  src="/delete.png"
+                  width={20}
+                  height={20}
+                  alt="Delete-Icon"
+                  className="w-[20px] h-[20px]  items-center justify-center"
+                  onClick={() => handleDelete(item.sessionId)}
+                />
+              </div>
+            );
+          })}
+        </div>
         <div className="bottom-0 fixed mb-4">
           <div className="flex space-x-2 cursor-pointer hover:bg-[rgb(20,20,20)] p-2 rounded-xl">
             <div className="tooltip">

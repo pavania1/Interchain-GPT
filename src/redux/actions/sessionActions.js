@@ -9,10 +9,10 @@ export const addSession = (data) => (dispatch) => {
   });
 };
 
-export const deleteSession = () => (dispatch) => {
+export const deleteSession = (sessionId) => (dispatch) => {
   return dispatch({
     type: DELETE_SESSION,
-    payload: {},
+    payload: sessionId,
   });
 };
 
