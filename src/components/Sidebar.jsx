@@ -45,7 +45,7 @@ export default function Sidebar(props) {
               height={30}
               alt="Picture of the author"
             />
-            <div className="mt-1">New Chat</div>
+            <div className="mt-1 text-white">New Chat</div>
           </div>
           <Tooltip title="New Chat" placement="right-start">
             <div
