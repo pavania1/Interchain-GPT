@@ -35,11 +35,11 @@ export default function Home() {
               />
             </div>
             <div className="flex space-x-1 hover:bg-zinc-800 p-2 rounded-xl w-[15%]">
-              <div className="font-bold">InterChainGPT</div>
+              <div className="font-bold text-white">InterChainGPT</div>
               <p className="text-[rgb(224,215,215)] font-bold">3.5</p>
             </div>
             <div>
-              <Tooltip title="New Chat" placement="right-start">
+              <Tooltip title="New Chat" placement="right-start" color="white">
                 <Image
                   src="/sign-icon.svg"
                   width={20}

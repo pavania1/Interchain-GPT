@@ -121,7 +121,7 @@ export default function MainPage(props) {
                     alt="logo-icon"
                   />
                 </div>
-                <div className="font-bold text-2xl mt-2">
+                <div className="font-bold text-2xl mt-2 text-white">
                   How can I help you today?
                 </div>
               </>

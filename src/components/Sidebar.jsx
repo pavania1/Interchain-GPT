@@ -99,7 +99,7 @@ export default function Sidebar(props) {
               />
             </div>
             <div>
-              <div className="text-[12px]">Upgrade plan</div>
+              <div className="text-[12px] text-white">Upgrade plan</div>
               <div className="text-[12px] text-[rgb(128,124,124)]">
                 Get GPT-4, DALL.E, and more
               </div>
@@ -107,11 +107,11 @@ export default function Sidebar(props) {
           </div>
           <div className="flex space-x-2 mt-2 cursor-pointer hover:bg-[rgb(20,20,20)] p-2 rounded-xl">
             <div className="bg-[#84E0C2] rounded-full w-[35px] h-[35px]">
-              <p className="relative -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4 text-center">
-                AD
+              <p className="relative -translate-x-2/4 -translate-y-2/4 left-2/4 top-2/4 text-center text-white">
+                ID
               </p>
             </div>
-            <div className="mt-1">Pavani Adina</div>
+            <div className="mt-1 text-white">User ID</div>
           </div>
         </div>
       </div>
