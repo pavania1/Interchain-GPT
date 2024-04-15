@@ -6,12 +6,18 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { addSession, addSessionData } from "@/redux/actions/sessionActions";
 import { v4 as uuidv4 } from "uuid";
+import Popup from "./Popup";
 
 export default function MainPage(props) {
   const sessionData = useSelector((state) => state.session.sessionData);
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
   const [message, setMessage] = useState("");
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleShareClick = () => {
+    setIsPopupOpen(true);
+  };
   useEffect(() => {
     let sessionId = sessionStorage.getItem("sessionId");
     if (!sessionId) {
@@ -90,9 +96,26 @@ export default function MainPage(props) {
 
   return (
     <div className="bg-[#171717] flex flex-col  w-full p-4 overflow-y-hidden h-[100vh] ">
-      <div className="flex space-x-1 items-start hover:bg-zinc-800 p-2 rounded-xl w-[15%] xs:hidden sm:hidden lg:flex md:flex">
-        <div className="font-bold text-white">InterChainGPT</div>
-        <p className="text-[rgb(224,215,215)] font-bold">3.5</p>
+      <div className="flex space-x-1 items-start w-full xs:hidden sm:hidden lg:flex md:flex justify-between">
+        <div className="space-x-2 flex hover:bg-zinc-800 p-2 rounded-xl">
+          <div className="font-bold text-white">InterChainGPT</div>
+          <p className="text-[rgb(224,215,215)] font-bold">3.5</p>
+        </div>
+        <div
+          className="hover:bg-zinc-800 p-2 rounded-xl"
+          onClick={handleShareClick}
+        >
+          <Image src="/share.png" width={24} height={24} alt="Share-Icon" />
+        </div>
+        {isPopupOpen && (
+          <Popup
+          data={data}
+            open
+            close={() => {
+              setIsPopupOpen(false);
+            }}
+          />
+        )}
       </div>
       <div className="flex items-center justify-center w-full h-full">
         <div className="max-w-[1100px] justify-center h-[100%] ">
@@ -101,7 +124,7 @@ export default function MainPage(props) {
               <div className="">
                 {data.map((item, index) => {
                   return (
-                    <div className="my-6" key={index}>
+                    <div className="my-6 text-white" key={index}>
                       <span style={{ fontWeight: "bold", fontSize: "18px" }}>
                         {item.type}:
                       </span>

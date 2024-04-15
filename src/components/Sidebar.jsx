@@ -17,10 +17,6 @@ export default function Sidebar(props) {
     setData(sessionList);
   }, [sessionList.length]);
 
-  useEffect(() => {
-    console.log(props.sidebarOpen, "-there --->")
-  }, [props.sidebarOpen]);
-
   const handleOnClick = (sessionId) => {
     router.push(`?sessionId=${sessionId}`);
     props.setSession(sessionId);

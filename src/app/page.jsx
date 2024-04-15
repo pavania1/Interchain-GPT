@@ -12,7 +12,7 @@ export default function Home() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sessionId, setSessionId] = useState("");
   const toggleSidebar = () => {
-    console.log("here ",sidebarOpen);
+    console.log("here ", sidebarOpen);
     setSidebarOpen(!sidebarOpen);
   };
 

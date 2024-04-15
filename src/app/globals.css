@@ -37,6 +37,14 @@ body {
     background: transparent;
     /* Optional: just make scrollbar invisible */
   }
+  .popup-grid {
+    @apply flex flex-col  shrink-0 px-4  w-[550px] justify-center h-[570px];
+    background: rgb(44,44,42,1);
+  }
+  .popup-v-line {
+    @apply h-0.5 self-stretch;
+    background: rgba(255, 255, 255, 0.2);
+  }
   
   
 }
