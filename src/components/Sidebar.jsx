@@ -78,7 +78,6 @@ export default function Sidebar(props) {
                   height={20}
                   alt="Delete-Icon"
                   className="w-[20px] h-[20px]  items-center justify-center"
-                  onClick={() => handleDelete(item.sessionId)}
                 />
               </div>
             );
