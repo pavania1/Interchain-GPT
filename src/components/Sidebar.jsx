@@ -1,3 +1,4 @@
+// Import useState
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
@@ -5,13 +6,27 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { deleteSession } from "@/redux/actions/sessionActions";
 import moment from "moment";
+import Popup from "./Popup";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Button,
+} from "@nextui-org/react";
 
 export default function Sidebar(props) {
   const sessionList = useSelector((state) => state.session.sessions);
   const sessionData = useSelector((state) => state.session.sessionData);
   const [data, setData] = useState([]);
+  const [shareData, setShareData] = useState([]);
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
+  const [newTitle, setNewTitle] = useState("");
+  const [editSessionId, setEditSessionId] = useState("");
+  // Define hoveredItemIndex state
+  const [hoveredItemIndex, setHoveredItemIndex] = useState(null);
 
   useEffect(() => {
     setData(sessionList);
@@ -24,6 +39,18 @@ export default function Sidebar(props) {
 
   const handleDelete = (sessionId) => {
     dispatch(deleteSession(sessionId));
+  };
+
+  const handleShareClick = (item) => {
+    setShareData(sessionData[item.sessionId]);
+    setIsPopupOpen(true);
+  };
+
+  const handleRename = (sessionId) => {
+    console.log("New title:", newTitle);
+    setIsRenaming(true);
+    setEditSessionId(sessionId);
+    setNewTitle("");
   };
 
   return (
@@ -65,20 +92,94 @@ export default function Sidebar(props) {
               <div
                 className="cursor-pointer  hover:bg-[rgb(20,20,20)] p-2 rounded-xl flex justify-between"
                 key={index}
+                // Add onMouseEnter and onMouseLeave event handlers
+                onMouseEnter={() => setHoveredItemIndex(index)}
+                onMouseLeave={() => setHoveredItemIndex(null)}
               >
-                <div onClick={() => handleOnClick(item.sessionId)}>
-                  {sessionData[item.sessionId]
-                    ? sessionData[item.sessionId][0].message
-                    : ""}
-                </div>
-                <p> {moment.unix(item.createdAt / 1000).fromNow()}</p>
-                <Image
-                  src="/delete.png"
-                  width={20}
-                  height={20}
-                  alt="Delete-Icon"
-                  className="w-[20px] h-[20px]  items-center justify-center"
-                />
+                {/* <p> {moment.unix(item.createdAt / 1000).fromNow()}</p> */}
+                {isPopupOpen && (
+                  <Popup
+                    data={shareData}
+                    open
+                    close={() => {
+                      setIsPopupOpen(false);
+                    }}
+                  />
+                )}
+                {isRenaming && item.sessionId === editSessionId ? (
+                  <input
+                    type="text"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    placeholder="Enter new title"
+                  />
+                ) : (
+                  <div onClick={() => handleOnClick(item.sessionId)}>
+                    {sessionData[item.sessionId]
+                      ? sessionData[item.sessionId][0].message
+                      : ""}
+                  </div>
+                )}
+                {/* Conditionally render Popover */}
+                {hoveredItemIndex === index && (
+                  <Popover placement="bottom" offset={20} showArrow>
+                    <PopoverTrigger>
+                      <Button>
+                        <Image
+                          src="/more.png"
+                          width={24}
+                          height={24}
+                          alt="more-icon"
+                          className="w-6 h-6"
+                        />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <div className="px-2 py-2 bg-zinc-800 rounded-xl w-48">
+                        <div className="space-y-4">
+                          <div>
+                            <div
+                              className="flex space-x-2 cursor-pointer  hover:bg-zinc-700 p-2 rounded-lg"
+                              onClick={() => handleShareClick(item)}
+                            >
+                              <Image
+                                src="/share.png"
+                                width={20}
+                                height={20}
+                                alt="Share-Icon"
+                              />
+                              <p>Share</p>
+                            </div>
+                          </div>
+                          <div
+                            className="flex space-x-2 cursor-pointer hover:bg-zinc-700 p-2 rounded-lg"
+                            onClick={() => handleRename(item.sessionId)}
+                          >
+                            <Image
+                              src="/rename.png"
+                              width={20}
+                              height={20}
+                              alt="Rename-Icon"
+                            />
+                            <p> Rename</p>
+                          </div>
+                          <div
+                            className="flex space-x-2 cursor-pointer  hover:bg-zinc-700 p-2 rounded-lg"
+                            onClick={() => handleDelete(item.sessionId)}
+                          >
+                            <Image
+                              src="/delete.png"
+                              width={20}
+                              height={20}
+                              alt="Delete-Icon"
+                            />
+                            <p> Delete Chat</p>
+                          </div>
+                        </div>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                )}
               </div>
             );
           })}
