@@ -1,4 +1,4 @@
-import { ADD_SESSION } from "../types/sessionTypes";
+import { ADD_SESSION, UPDATE_SESSION } from "../types/sessionTypes";
 import { DELETE_SESSION } from "../types/sessionTypes";
 import { ADD_SESSION_DATA } from "../types/sessionTypes";
 
@@ -8,7 +8,7 @@ const initialState = {
 };
 
 const sessionReducer = (state = initialState, action) => {
-  let sessionsCopy = Object.assign([], state.sessions);
+  let sessionsCopy = JSON.parse(JSON.stringify(state.sessions));
   switch (action.type) {
     case ADD_SESSION:
       sessionsCopy.push(action.payload);
@@ -39,6 +39,16 @@ const sessionReducer = (state = initialState, action) => {
         sessionData[latestSessionId] = [action.payload];
       }
       return { ...state, sessionData };
+    case UPDATE_SESSION:
+      const idToUpdate = sessionsCopy.findIndex(
+        (item) => item.sessionId === action.payload.sessionId
+      );
+      if (idToUpdate > -1) {
+        sessionsCopy[idToUpdate].title = action.payload.title;
+        return { ...state, sessions: sessionsCopy };
+      } else {
+        return state;
+      }
     default:
       return state;
   }

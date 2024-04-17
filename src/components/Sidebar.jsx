@@ -1,4 +1,3 @@
-// Import useState
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
@@ -7,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { deleteSession } from "@/redux/actions/sessionActions";
 import moment from "moment";
 import Popup from "./Popup";
+import { updateSession } from "@/redux/actions/sessionActions";
 import {
   Popover,
   PopoverTrigger,
@@ -25,12 +25,10 @@ export default function Sidebar(props) {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [editSessionId, setEditSessionId] = useState("");
-  // Define hoveredItemIndex state
-  const [hoveredItemIndex, setHoveredItemIndex] = useState(null);
 
   useEffect(() => {
     setData(sessionList);
-  }, [sessionList.length]);
+  }, [sessionList.length, JSON.stringify(sessionList)]);
 
   const handleOnClick = (sessionId) => {
     router.push(`?sessionId=${sessionId}`);
@@ -47,7 +45,6 @@ export default function Sidebar(props) {
   };
 
   const handleRename = (sessionId) => {
-    console.log("New title:", newTitle);
     setIsRenaming(true);
     setEditSessionId(sessionId);
     setNewTitle("");
@@ -92,9 +89,6 @@ export default function Sidebar(props) {
               <div
                 className="cursor-pointer  hover:bg-[rgb(20,20,20)] p-2 rounded-xl flex justify-between"
                 key={index}
-                // Add onMouseEnter and onMouseLeave event handlers
-                onMouseEnter={() => setHoveredItemIndex(index)}
-                onMouseLeave={() => setHoveredItemIndex(null)}
               >
                 {/* <p> {moment.unix(item.createdAt / 1000).fromNow()}</p> */}
                 {isPopupOpen && (
@@ -110,76 +104,90 @@ export default function Sidebar(props) {
                   <input
                     type="text"
                     value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
+                    onChange={(e) => {
+                      setNewTitle(e.target.value);
+                      dispatch(updateSession(editSessionId, e.target.value));
+                    }}
+                    onBlur={() => {
+                      setEditSessionId("");
+                    }}
+                    onKeyUp={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (e.key === 'Enter') {
+                        setEditSessionId("");
+                      }
+                    }}
                     placeholder="Enter new title"
+                    className="text-black"
                   />
                 ) : (
                   <div onClick={() => handleOnClick(item.sessionId)}>
-                    {sessionData[item.sessionId]
+                    {item.title
+                      ? item.title
+                      : sessionData[item.sessionId]
                       ? sessionData[item.sessionId][0].message
                       : ""}
                   </div>
                 )}
-                {/* Conditionally render Popover */}
-                {hoveredItemIndex === index && (
-                  <Popover placement="bottom" offset={20} showArrow>
-                    <PopoverTrigger>
-                      <Button>
-                        <Image
-                          src="/more.png"
-                          width={24}
-                          height={24}
-                          alt="more-icon"
-                          className="w-6 h-6"
-                        />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent>
-                      <div className="px-2 py-2 bg-zinc-800 rounded-xl w-48">
-                        <div className="space-y-4">
-                          <div>
-                            <div
-                              className="flex space-x-2 cursor-pointer  hover:bg-zinc-700 p-2 rounded-lg"
-                              onClick={() => handleShareClick(item)}
-                            >
-                              <Image
-                                src="/share.png"
-                                width={20}
-                                height={20}
-                                alt="Share-Icon"
-                              />
-                              <p>Share</p>
-                            </div>
-                          </div>
-                          <div
-                            className="flex space-x-2 cursor-pointer hover:bg-zinc-700 p-2 rounded-lg"
-                            onClick={() => handleRename(item.sessionId)}
-                          >
-                            <Image
-                              src="/rename.png"
-                              width={20}
-                              height={20}
-                              alt="Rename-Icon"
-                            />
-                            <p> Rename</p>
-                          </div>
+
+                <Popover placement="bottom" offset={20} showArrow>
+                  <PopoverTrigger>
+                    <Button>
+                      <Image
+                        src="/more.png"
+                        width={24}
+                        height={24}
+                        alt="more-icon"
+                        className="w-6 h-6"
+                      />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    <div className="px-2 py-2 bg-zinc-800 rounded-xl w-48">
+                      <div className="space-y-4">
+                        <div>
                           <div
                             className="flex space-x-2 cursor-pointer  hover:bg-zinc-700 p-2 rounded-lg"
-                            onClick={() => handleDelete(item.sessionId)}
+                            onClick={() => handleShareClick(item)}
                           >
                             <Image
-                              src="/delete.png"
+                              src="/share.png"
                               width={20}
                               height={20}
-                              alt="Delete-Icon"
+                              alt="Share-Icon"
                             />
-                            <p> Delete Chat</p>
+                            <p>Share</p>
                           </div>
                         </div>
+                        <div
+                          className="flex space-x-2 cursor-pointer hover:bg-zinc-700 p-2 rounded-lg"
+                          onClick={() => handleRename(item.sessionId)}
+                        >
+                          <Image
+                            src="/rename.png"
+                            width={20}
+                            height={20}
+                            alt="Rename-Icon"
+                          />
+                          <p> Rename</p>
+                        </div>
+                        <div
+                          className="flex space-x-2 cursor-pointer  hover:bg-zinc-700 p-2 rounded-lg"
+                          onClick={() => handleDelete(item.sessionId)}
+                        >
+                          <Image
+                            src="/delete.png"
+                            width={20}
+                            height={20}
+                            alt="Delete-Icon"
+                          />
+                          <p> Delete Chat</p>
+                        </div>
                       </div>
-                    </PopoverContent>
-                  </Popover>
-                )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
               </div>
             );
           })}
