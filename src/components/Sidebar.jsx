@@ -70,11 +70,11 @@ export default function Sidebar(props) {
           <div className="flex space-x-2">
             <Image
               src="/logo.svg"
-              width={30}
-              height={30}
-              alt="Picture of the author"
+              width={28}
+              height={28}
+              alt="Logo"
             />
-            <div className="mt-1 text-white">New Chat</div>
+            <div className="mt-1 text-white text-sm font-medium">New Chat</div>
           </div>
           <Tooltip title="New Chat" placement="right-start">
             <div
@@ -108,7 +108,7 @@ export default function Sidebar(props) {
             }
             return (
               <div
-                className="cursor-pointer  flex flex-col justify-between"
+                className="cursor-pointer  flex flex-col justify-between mt-6"
                 key={index}
               >
                 <p>{item}</p>
@@ -137,9 +137,9 @@ export default function Sidebar(props) {
                       className="text-black"
                     />
                   ) : (
-                    <div className="flex hover:bg-[rgb(20,20,20)] p-2 rounded-xl ">
+                    <div key={msgId} className="flex hover:bg-[rgb(20,20,20)] p-2 rounded-xl ">
                       <div
-                        key={msgId}
+                       
                         onClick={() => handleOnClick(msg.sessionId)}
                       >
                         {msg.title
