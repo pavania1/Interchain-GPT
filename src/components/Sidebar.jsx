@@ -25,7 +25,7 @@ export default function Sidebar(props) {
   const [isRenaming, setIsRenaming] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [editSessionId, setEditSessionId] = useState("");
-  const [date, setDate] = useState("");
+  const [hoveredItemId, setHoveredItemId] = useState(null);
 
   useEffect(() => {
     const arrayOfDates = groupDataByDate(sessionList);
@@ -68,12 +68,7 @@ export default function Sidebar(props) {
       >
         <div className="flex justify-between cursor-pointer hover:bg-[rgb(20,20,20)] p-2 rounded-xl">
           <div className="flex space-x-2">
-            <Image
-              src="/logo.svg"
-              width={28}
-              height={28}
-              alt="Logo"
-            />
+            <Image src="/logo.svg" width={24} height={24} alt="Logo" />
             <div className="mt-1 text-white text-sm font-medium">New Chat</div>
           </div>
           <Tooltip title="New Chat" placement="right-start">
@@ -111,7 +106,9 @@ export default function Sidebar(props) {
                 className="cursor-pointer  flex flex-col justify-between mt-6"
                 key={index}
               >
-                <p>{item}</p>
+                <p className="text-xs font-medium text-[rgb(173,171,171)]">
+                  {item}
+                </p>
 
                 {data[item].map((msg, msgId) =>
                   isRenaming && msg.sessionId === editSessionId ? (
@@ -137,9 +134,14 @@ export default function Sidebar(props) {
                       className="text-black"
                     />
                   ) : (
-                    <div key={msgId} className="flex hover:bg-[rgb(20,20,20)] p-2 rounded-xl ">
+                    <div
+                      key={msgId}
+                      onMouseEnter={() => setHoveredItemId(msg.sessionId)}
+                      onMouseLeave={() => setHoveredItemId(null)}
+                      className="flex hover:bg-[rgb(20,20,20)] p-2 rounded-xl text-sm"
+                    >
                       <div
-                       
+                        className="whitespace-nowrap overflow-hidden text-ellipsis w-48"
                         onClick={() => handleOnClick(msg.sessionId)}
                       >
                         {msg.title
@@ -148,18 +150,22 @@ export default function Sidebar(props) {
                           ? sessionData[msg.sessionId][0].message
                           : ""}
                       </div>
+
                       <Popover placement="bottom" offset={20} showArrow>
                         <PopoverTrigger>
                           <Button>
-                            <Image
-                              src="/more.png"
-                              width={24}
-                              height={24}
-                              alt="more-icon"
-                              className="w-6 h-6"
-                            />
+                            {hoveredItemId === msg.sessionId && (
+                              <Image
+                                src="/more.png"
+                                width={24}
+                                height={24}
+                                alt="more-icon"
+                                className="w-6 h-6"
+                              />
+                            )}
                           </Button>
                         </PopoverTrigger>
+
                         <PopoverContent>
                           <div className="px-2 py-2 bg-zinc-800 rounded-xl w-48">
                             <div className="space-y-4">
@@ -242,18 +248,15 @@ export default function Sidebar(props) {
     </>
   );
 }
-// function timestampToDate(timestamp) {
-//   return new Date(timestamp * 1000);
-// }
 
 const groupDataByDate = (data) => {
   const today = new Date();
   const groupedData = {
-    today: [],
-    yesterday: [],
-    lastWeek: [],
-    lastMonth: [],
-    older: [],
+    Today: [],
+    Yesterday: [],
+    LastWeek: [],
+    LastMonth: [],
+    Older: [],
   };
 
   data.forEach((item) => {
@@ -262,15 +265,15 @@ const groupDataByDate = (data) => {
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     if (diffDays === 0) {
-      groupedData.today.push(item);
+      groupedData.Today.push(item);
     } else if (diffDays === 1) {
-      groupedData.yesterday.push(item);
+      groupedData.Yesterday.push(item);
     } else if (diffDays <= 7) {
-      groupedData.lastWeek.push(item);
+      groupedData.LastWeek.push(item);
     } else if (diffDays <= 30) {
-      groupedData.lastMonth.push(item);
+      groupedData.LastMonth.push(item);
     } else {
-      groupedData.older.push(item);
+      groupedData.Older.push(item);
     }
   });
 

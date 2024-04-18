@@ -98,8 +98,8 @@ export default function MainPage(props) {
     <div className="bg-[#171717] flex flex-col  w-full p-4 overflow-y-hidden h-[100vh] ">
       <div className="flex space-x-1 items-start w-full xs:hidden sm:hidden lg:flex md:flex justify-between">
         <div className="space-x-2 flex hover:bg-zinc-800 p-2 rounded-xl">
-          <div className="font-bold text-white">InterChainGPT</div>
-          <p className="text-[rgb(224,215,215)] font-bold">3.5</p>
+          <div className="font-medium text-white text-lg">InterChainGPT</div>
+          <p className="text-[rgb(224,215,215)] font-medium text-lg">3.5</p>
         </div>
         <div
           className="hover:bg-zinc-800 p-2 rounded-xl"
@@ -109,7 +109,7 @@ export default function MainPage(props) {
         </div>
         {isPopupOpen && (
           <Popup
-          data={data}
+            data={data}
             open
             close={() => {
               setIsPopupOpen(false);
@@ -118,8 +118,12 @@ export default function MainPage(props) {
         )}
       </div>
       <div className="flex items-center justify-center w-full h-full">
-        <div className="max-w-[1100px] justify-center h-[100%] ">
-          <div className="flex flex-col my-6  items-center overflow-y-scroll h-[80%]  ">
+        <div className="max-w-[1100px] justify-center h-[100%] min-w-[40vw] ">
+          <div
+            className={`flex flex-col my-6 items-center overflow-y-scroll h-[80%] ${
+              data.length > 0 ? "" : "justify-center"
+            }`}
+          >
             {data.length > 0 ? (
               <div className="">
                 {data.map((item, index) => {
@@ -144,18 +148,19 @@ export default function MainPage(props) {
                     alt="logo-icon"
                   />
                 </div>
-                <div className="font-bold text-2xl mt-2 text-white">
+                <div className="font-medium text-2xl mt-2 text-white">
                   How can I help you today?
                 </div>
               </>
             )}
           </div>
+
           <div className="border rounded-xl border-zinc-600 p-2 flex w-full">
             <textarea
               type="text"
               value={message}
               onChange={handleMessageChange}
-              placeholder="Enter your message..."
+              placeholder="Message InterChainGPT..."
               className="w-full bg-transparent outline-none border-none text-[rgb(173,171,171)]"
             />
 
@@ -166,7 +171,7 @@ export default function MainPage(props) {
               <Image src="/arrow.png" width={24} height={24} alt="enter-icon" />
             </button>
           </div>
-          <div className="mt-2 text-sm text-[rgb(173,171,171)] text-center">
+          <div className="mt-2 text-xs text-[rgb(173,171,171)] text-center">
             InterChainGPT can make mistakes. Consider checking important
             information.
           </div>
