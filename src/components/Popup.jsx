@@ -19,7 +19,9 @@ const Popup = ({ open, close, data }) => {
     const currentSession = sessionList.find(
       (item) => item.sessionId == sessionId
     );
-    setCreatedAt(currentSession.createdAt);
+    if (currentSession) {
+      setCreatedAt(currentSession.createdAt);
+    }
   }, [sessionList.length]);
 
   const copyToClipboard = () => {
