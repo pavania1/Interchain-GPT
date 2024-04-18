@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent } from "@mui/material";
+import { Dialog, DialogContent, Tooltip } from "@mui/material";
 import Image from "next/image";
 import moment from "moment";
 import { useSelector } from "react-redux";
@@ -94,18 +94,24 @@ const Popup = ({ open, close, data }) => {
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent>
-                      <div className="px-2 py-2 bg-zinc-800 rounded-lg hover:bg-gray-700">
-                        <div className="space-x-2 flex">
-                          <Image
-                            src="/delete.png"
-                            width={24}
-                            height={24}
-                            alt="Delete-Icon"
-                          />
-                          <div className="text-small font-bold">
-                            Delete Link
+                      <div className="px-2 py-2 bg-zinc-800 rounded-lg hover:bg-gray-700 cursor-not-allowed">
+                        <Tooltip
+                          title="coming soon"
+                          placement="bottom"
+                          color="white"
+                        >
+                          <div className="space-x-2 flex">
+                            <Image
+                              src="/delete.png"
+                              width={24}
+                              height={24}
+                              alt="Delete-Icon"
+                            />
+                            <div className="text-small font-bold">
+                              Delete Link
+                            </div>
                           </div>
-                        </div>
+                        </Tooltip>
                       </div>
                     </PopoverContent>
                   </Popover>
@@ -114,12 +120,15 @@ const Popup = ({ open, close, data }) => {
             </div>
           </div>
           <div className="pt-4 justify-end flex">
-            <button
-              className="bg-[#99EDC3] text-white p-2 rounded-xl cursor-pointer"
-              onClick={copyToClipboard}
-            >
-              Copy Link
-            </button>
+            <Tooltip title="coming soon" placement="left-start" color="white">
+              <button
+                className="bg-[#99EDC3] text-white p-2 rounded-xl cursor-not-allowed"
+                onClick={copyToClipboard}
+                disabled
+              >
+                Copy Link
+              </button>
+            </Tooltip>
           </div>
         </div>
       </DialogContent>

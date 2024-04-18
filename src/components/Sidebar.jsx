@@ -155,6 +155,7 @@ export default function Sidebar(props) {
                         <PopoverTrigger>
                           <Button>
                             {hoveredItemId === msg.sessionId && (
+                              <Tooltip title="More" placement="right-start" color="white">
                               <Image
                                 src="/more.png"
                                 width={24}
@@ -162,6 +163,7 @@ export default function Sidebar(props) {
                                 alt="more-icon"
                                 className="w-6 h-6"
                               />
+                              </Tooltip>
                             )}
                           </Button>
                         </PopoverTrigger>
